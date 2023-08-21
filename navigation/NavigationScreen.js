@@ -7,10 +7,6 @@ import Onboarding from "../screen/Onboarding";
 const Stack = createStackNavigator();
 
 const NavigationScreen = () => {
-  const { user_isLoading, data, user, isError } = useSelector(
-    (state) => state.LoginSlice
-  );
-
   return (
     <Stack.Navigator>
       <Stack.Screen
