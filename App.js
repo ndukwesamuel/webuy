@@ -1,49 +1,48 @@
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 import { StyleSheet, Text, View } from "react-native";
-import Login from "./screen/Login";
-import Home from "./screen/Home";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import OnboardingScreen from "./screen/OnboardingScreen";
 
+import { useFonts } from "expo-font";
+import { useCallback, useEffect } from "react";
+
+import { store } from "./Slice/store";
+import { Provider, useSelector } from "react-redux";
+import NavigationScreen from "./navigation/NavigationScreen";
 const Stack = createStackNavigator();
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Onboarding"
-            component={OnboardingScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{
-              headerShown: false,
-            }}
-          />
+  const [fontsLoaded] = useFonts({
+    regular: require("./assets/fonts/Poppins-Regular.ttf"),
+    medium: require("./assets/fonts/Poppins-Medium.ttf"),
+    bold: require("./assets/fonts/Poppins-Bold.ttf"),
+    light: require("./assets/fonts/Poppins-Light.ttf"),
+    extraBold: require("./assets/fonts/Poppins-ExtraBold.ttf"),
+    semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
+  });
 
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </SafeAreaProvider>
-    </NavigationContainer>
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationScreen />
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {},
-});
+const styles = StyleSheet.create({});

@@ -1,130 +1,71 @@
-import { View, Text, TextInput, TouchableOpacity, Button } from "react-native";
 import React, { useState } from "react";
+import {
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GlobalStyles from "../GlobalStyles";
+
+import styles from "../screen/home.styles";
+import { AntDesign, Fontisto, Ionicons } from "@expo/vector-icons";
+import SliderBanner from "../components/homecomonents/SliderBanner";
+import CategoriesCard from "../components/homecomonents/CategoriesCard";
+import RelatedItems from "../components/homecomonents/RelatedItems";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
 
 const Home = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-
   const navigation = useNavigation();
 
-  const handleEmailChange = (text) => {
-    setEmail(text);
+  const handleSearchPress = () => {
+    navigation.navigate("Search"); // Navigate to the "Search" screen
   };
 
-  const handlePasswordChange = (text) => {
-    setPassword(text);
-  };
-
-  const handleLogin = () => {
-    setIsLoading(true);
-
-    if (email == "" || password == "") {
-      Alert.alert(
-        "Alert",
-        "Email and Password field is required",
-        [{ text: "OK" }],
-        { cancelable: false }
-      );
-      setIsLoading(false);
-    } else {
-      // Simulating login request delay
-      // Perform login logic here
-      console.log("Email:", email);
-      console.log("Password:", password);
-      setIsLoading(false);
-
-      navigation.navigate("Home");
-    }
-  };
-
-  const SignUpPage = () => {
-    const webAppUrl = "https://webuyam.vercel.app/"; // Replace with your web app URL
-    Linking.openURL(webAppUrl);
-  };
   return (
-    <SafeAreaView style={GlobalStyles.droidSafeArea} className="h-full ">
-      <View className="  flex-col items-center ">
-        <View className=" w-[90%] mt-20">
-          <Text className="font-semibold text-2xl">Welcome Back</Text>
-          <Text className=" font-medium text-lg">
-            Enter the email address registered with Webuyam
-          </Text>
+    <SafeAreaView className="h-full  bg-[#ECEBE4]">
+      <View style={styles.appBarWrapper}>
+        <View style={styles.appBar}>
+          <Ionicons name="location-outline" size={24} />
+          <Text style={styles.appBarText}>Nigeria</Text>
 
-          <View className="mt mt-10">
-            <Text className=" font-normal text-sm">Enter Email Address</Text>
-            <TextInput
-              placeholder="Email"
-              value={email}
-              onChangeText={handleEmailChange}
-              editable={!isLoading} // Disable input while loading
-              className="border  border-[#0C1401]  rounded px-3 h-10    "
-            />
-            <View className="my-10 ">
-              <Text className=" font-normal text-sm">Enter Password</Text>
-              <View className=" border border-[#0C1401]   rounded px-3 h-10  flex-row items-center">
-                <TextInput
-                  className="w-[90%] pl-5 "
-                  value={password}
-                  onChangeText={handlePasswordChange}
-                  placeholder="Password"
-                  secureTextEntry={secureTextEntry}
-                  editable={!isLoading} // Disable input while loading
-                  style={{
-                    height: 45,
-                    fontSize: 14,
-                    // fontFamily: "Roboto-Regular",
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => setSecureTextEntry(!secureTextEntry)}
-                >
-                  <Text>
-                    {secureTextEntry ? (
-                      <Feather name="eye" size={24} color="black" />
-                    ) : (
-                      <Feather name="eye-off" size={24} color="black" />
-                    )}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+          <View style={{ alignItems: "flex-end" }}>
+            <View style={styles.cartCount}>
+              <Text style={styles.cartNumber}> 8</Text>
             </View>
 
-            <Button
-              title={isLoading ? "Loading..." : "Login"}
-              onPress={handleLogin}
-              disabled={isLoading}
-              color="black"
-              style={{
-                backgroundColor: "black",
-                padding: 10,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: "white",
-                color: "white",
-                fontWeight: "bold",
-              }}
-            />
-          </View>
-
-          <View className=" flex-row items-center m-auto mt-4">
-            <Text className="text-xs font-medium">
-              Dont have an account yet?{" "}
-            </Text>
-
-            <Text className="text-xs font-medium ">
-              Lets get you started.
-              <Text className="text-[#0254CF]" onPress={SignUpPage}>
-                Sign up
-              </Text>
-            </Text>
+            <TouchableOpacity>
+              <Fontisto name="shopping-bag" size={24} />
+            </TouchableOpacity>
           </View>
         </View>
+      </View>
+
+      <TouchableOpacity
+        onPress={handleSearchPress}
+        className="flex-row items-center bg-white rounded-lg p-2 mx-5 mt-3 justify-between"
+      >
+        <AntDesign name="search1" size={20} color="#888" style="" />
+        <Text className="text-sm ">What are you looking for ? </Text>
+        <Ionicons name="radio-outline" size={24} color="black" />
+      </TouchableOpacity>
+
+      <View className="banner   p-4">
+        {/* Other components */}
+
+        <SliderBanner />
+        {/* Other components */}
+      </View>
+
+      <View className="     ">
+        <CategoriesCard />
+      </View>
+
+      <View className="bg-white">
+        {/* Other components */}
+        <RelatedItems />
+        {/* Other components */}
       </View>
     </SafeAreaView>
   );
